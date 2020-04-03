@@ -1,0 +1,62 @@
+Sub 全文编号转文本()
+
+'将文档中全部自动编号转成正常文本。
+
+ActiveDocument.Range.ListFormat.ConvertNumbersToText
+End Sub
+Sub 一建统一所有表格样式()
+'
+' 一建统一所有表格样式 宏
+'
+'
+For i = 1 To ActiveDocument.Tables.Count
+
+    ActiveDocument.Tables(i).Style = " 样式3 "
+    
+    ' 应用指定样式
+    ActiveDocument.Tables(i).AutoFitBehavior (wdAutoFitContent)
+    
+    ' 根据内容调整
+    ActiveDocument.Tables(i).AutoFitBehavior (wdAutoFitWindow)
+     
+    ' 根据窗口调整
+    
+
+
+Next i
+
+' 循环
+
+End Sub
+Sub 一键表格布局()
+'
+' 一次性处理样式未曾处理的其他格式，一个一个表格
+'
+'
+    Selection.SelectCell
+
+    Selection.Rows.HeightRule = wdRowHeightAtLeast
+    Selection.Rows.Height = CentimetersToPoints(0.8)
+    Selection.Style = ActiveDocument.Styles(" 表格内文字 ")
+    Selection.ParagraphFormat.Alignment = wdAlignParagraphCenter
+    Selection.Cells.VerticalAlignment = wdCellAlignVerticalCenter
+
+End Sub
+
+Sub 省市高亮()
+Dim Keywd, i%
+Keywd = Array("辽宁", "吉林", "黑龙江", "河北", "山西", "陕西", "甘肃", "青海", "山东", "安徽", "江苏", "浙江", "河南", "湖北", "湖南", "江西", "台湾", "福建", "云南", "海南", "四川", "贵州", "广东", "内蒙", "新疆", "广西", "西藏", "宁夏", "北京", "上海", "天津", "重庆", "香港", "澳门", "雄安", "市", "县", "新区", "乡", "镇", "村")
+Application.ScreenUpdating = False
+Options.DefaultHighlightColorIndex = wdYellow
+For i = 0 To UBound(Keywd)
+   With ActiveDocument.Content.Find
+      .ClearFormatting
+      .Text = Keywd(i)
+      .MatchWildcards = False
+      .Replacement.Highlight = True
+      .Forward = True
+      .Execute Replace:=wdReplaceAll
+  End With
+Next
+Application.ScreenUpdating = True
+End Sub
